@@ -3,6 +3,7 @@ import {useEffect, useRef, useState} from 'react';
 import {gsap} from 'gsap';
 import {DummyFour, DummyOne, DummyThree, DummyTwo} from '@/public/images';
 import {useGSAP} from '@gsap/react';
+import Slider from '@/components/Slider';
 
 const images = [
   DummyOne,
@@ -61,9 +62,9 @@ export default function GsapHorizontalSlider() {
               duration: 1.5,
               onComplete: () => {
                 gsap.set('.single-card', {display: 'none'});
-                // setPhase('slider');
               },
             });
+            setPhase('slider');
           },
         }
       );
@@ -74,30 +75,30 @@ export default function GsapHorizontalSlider() {
   useEffect(() => {
     if (phase !== 'slider') return;
 
-    const ctx = gsap.context(() => {
-      gsap.to('.single-card', {
-        opacity: 0,
-        duration: 0.5,
-        onComplete: () => {
-          gsap.set('.single-card', {display: 'none'});
+    // const ctx = gsap.context(() => {
+    //   gsap.to('.single-card', {
+    //     opacity: 0,
+    //     duration: 0.5,
+    //     onComplete: () => {
+    //       gsap.set('.single-card', {display: 'none'});
 
-          // Animate in horizontal cards
-          gsap.fromTo(
-            cardsRef.current,
-            {opacity: 0, x: 100},
-            {
-              opacity: 1,
-              x: 0,
-              stagger: 0.15,
-              duration: 0.6,
-              ease: 'power2.out',
-            }
-          );
-        },
-      });
-    }, containerRef);
+    //       // Animate in horizontal cards
+    //       gsap.fromTo(
+    //         cardsRef.current,
+    //         {opacity: 0, x: 100},
+    //         {
+    //           opacity: 1,
+    //           x: 0,
+    //           stagger: 0.15,
+    //           duration: 0.6,
+    //           ease: 'power2.out',
+    //         }
+    //       );
+    //     },
+    //   });
+    // }, containerRef);
 
-    return () => ctx.revert();
+    // return () => ctx.revert();
   }, [phase]);
 
   return (
@@ -139,14 +140,14 @@ export default function GsapHorizontalSlider() {
       )}
       {/* Horizontal Slider */}
       {phase === 'slider' && (
-        <div className='flex overflow-x-auto gap-4 px-4 max-w-full'>
-          {images.map((img, idx) => (
+        <Slider
+          data={images.map((img, idx) => (
             <div
               key={idx}
               ref={(el) => {
                 cardsRef.current[idx] = el;
               }}
-              className='min-w-[calc(100%_/_5)] h-auto rounded-lg overflow-hidden shadow-md opacity-0'
+              className='min-w-[calc(100%_/_5)] h-auto rounded-lg overflow-hidden shadow-md'
             >
               <img
                 src={img?.src}
@@ -155,7 +156,25 @@ export default function GsapHorizontalSlider() {
               />
             </div>
           ))}
-        </div>
+        />
+        // <div className='flex overflow-x-auto gap-4 px-4 max-w-full'>
+
+        //   {images.map((img, idx) => (
+        //     <div
+        //       key={idx}
+        //       ref={(el) => {
+        //         cardsRef.current[idx] = el;
+        //       }}
+        //       className='min-w-[calc(100%_/_5)] h-auto rounded-lg overflow-hidden shadow-md'
+        //     >
+        //       <img
+        //         src={img?.src}
+        //         alt={`img-${idx}`}
+        //         className='w-full h-full object-cover'
+        //       />
+        //     </div>
+        //   ))}
+        // </div>
       )}
     </div>
   );
