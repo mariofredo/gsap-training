@@ -24,7 +24,7 @@ export default function GsapHorizontalSlider() {
   const [currentImage, setCurrentImage] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const cardsRef = useRef<Array<HTMLDivElement | null>>([]);
-
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
   // Rotate images while in "single" phase
   useEffect(() => {
     if (phase !== 'first') return;
@@ -53,15 +53,15 @@ export default function GsapHorizontalSlider() {
           left: (i) => `${i * 20}%`,
           x: (i) => `0`,
           // stagger: 0.15,
-          duration: 1,
+          duration: 2,
           ease: 'power2.out',
           onComplete: () => {
             gsap.to('.single-card', {
               opacity: 0,
-              duration: 0.5,
+              duration: 1.5,
               onComplete: () => {
                 gsap.set('.single-card', {display: 'none'});
-                setPhase('slider');
+                // setPhase('slider');
               },
             });
           },
@@ -99,7 +99,7 @@ export default function GsapHorizontalSlider() {
 
     return () => ctx.revert();
   }, [phase]);
-  console.log(images, 'images');
+
   return (
     <div
       className='w-full h-screen flex justify-center items-center mt-20'
@@ -124,6 +124,9 @@ export default function GsapHorizontalSlider() {
                 cardsRef.current[idx] = el;
               }}
               className='w-[calc(100%_/_5)] h-auto overflow-hidden rounded-xl shadow-xl'
+              onClick={() => {
+                setPhase('slider');
+              }}
             >
               <img
                 src={img.src}
